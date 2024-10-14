@@ -34,6 +34,14 @@ app.get("/api/:input(\\d+)", function (req, res) {
 //5. Parsable date
 app.get("/api/:input", function (req, res) {
   const input = req.params.input;
+  if (!input) {
+    const curDate = new Date();
+    res.json({
+      unix: curDate.getTime(),
+      utc: curDate.toUTCString()
+    });
+    return;
+  }
   const inputDate = new Date(input);
   console.log(inputDate);
   // 6 Unparsable
