@@ -19,11 +19,51 @@ app.get("/", function (req, res) {
 });
 
 
-// your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+// 4. Handle unix timestamp
+app.get("/api/:input(\\d+)", function (req, res) {
+
+  const input = req.params.input;
+  const inputDate = new Date(parseInt(input));
+  console.log(inputDate);
+  res.json({
+    unix: inputDate.getTime(),
+    utc: inputDate.toUTCString()
+  })
+})
+
+//5. Parsable date
+app.get("/api/:input", function (req, res) {
+  const input = req.params.input;
+  const inputDate = new Date(input);
+  console.log(inputDate);
+  // 6 Unparsable
+  if (inputDate.toUTCString() === "Invalid Date"){
+    res.json({error: "Invalid Date"});
+  } else {
+    res.json({
+      unix: inputDate.getTime(),
+      utc: inputDate.toUTCString()
+    })
+  }
+
+})
+
+// 2-3
+app.get("/api/\:date\?", function (req, res) {
+  const curDate = new Date();
+  res.json({
+    unix: curDate.getTime(),
+    utc: curDate.toUTCString()
+  });
 });
 
+app.get("/api/", function (req, res) {
+  const curDate = new Date();
+  res.json({
+    unix: curDate.getTime(),
+    utc: curDate.toUTCString()
+  });
+});
 
 
 // Listen on port set in environment variable or default to 3000
